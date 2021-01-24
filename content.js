@@ -8,6 +8,10 @@ $(function(){
 
   document.addEventListener('dblclick', function(e, t) {
     let textSelected = document.getSelection().toString();
+
+    if (textSelected.length === 0 || textSelected === '\n') {
+      return;
+    }
     
     if (data.includes(textSelected)) {
       alertMsg(ALERT_EXIST);
@@ -81,9 +85,79 @@ function importElement() {
       display: none;
       opacity: 0.8;">
       Data succes!
-    </p>`;
+    </p>`,
+    menu = `<div style="
+      position: fixed;
+      top: 4px;
+      z-index: 1000;
+      padding: 3px 6px;
+      background-color: white;
+      border: 1px solid #bd8502;
+      border-bottom-right-radius: 3px;
+      border-top-right-radius: 3px;
+      border-left: none;
+      opacity: 0.8;
+    ">
+      <a src="javascript:void(0);">Menu</a>
+      <img src="https://github.com/dtvthethe/chrome_db_en/blob/main/icons/favicon-32x32.png?raw=true" alt="menu" style="
+        display: inline;
+        width: 21px;
+        height: 21px;
+      ">
+    </div>
+    <div style="
+      height: 32px;
+      width: 81px;
+      top: 4px;
+      z-index: 1001;
+      position: fixed;
+      opacity: 0;
+      cursor: pointer;
+    "></div>`,
+    list = `
+    <div style="
+        position: fixed;
+        top: 10px;
+        z-index: 1000;
+        left: 100px;
+        border: 1px solid #ca9e48;
+        border-radius: 3px;
+        background: rebeccapurple;
+    }">
+        <span>X</span>
+        <p>List of new word</p>
+        <div>
+            <p>Number of words</p>
+            <input type="text" id="db-click-en-input-num" value="10"></input>
+            <button>Load</button>
+            <button>Transale</button>
+        </div>
+        <table border="1px">
+            <thead>
+                <th>
+                    <input id="db-click-en-input-all" type="checkbox"></input>
+                </th>
+                <th>ENG</th>
+                <th>VIE</th>
+                <th>Pronounciation</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input class="db-click-en-input-word" type="checkbox"></td>
+                    <td>a</td>
+                    <td>b</td>
+                    <td>@</td>
+                    <td>
+                        <span>Delete</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    `;
   
-  $('body').append(alertExisted).append(alertDataLoaded).append(alertDatasuccess);
+  $('body').append(alertExisted).append(alertDataLoaded).append(alertDatasuccess).append(menu).append(list);
 }
 
 function alertMsg(alertType = null) {
