@@ -1,61 +1,44 @@
-let data = [];
-const ALERT_EXIST = 1;
-const ALERT_LOADED = 2;
-const ALERT_ADDED = 3;
+let data = [],
+  eventsRef = null;
 
 $(function(){
   importElement();
-  setTimeout(authfirebase(), 1000);
-  setTimeout(fetchData(), 2000);
+  eventsRef = authFirebase();
+  fetchData(eventsRef);
 
-  document.addEventListener("dblclick", function(e, t) {
+  document.addEventListener('dblclick', function(e, t) {
     let textSelected = document.getSelection().toString();
     
     if (data.includes(textSelected)) {
       alertMsg(ALERT_EXIST);
     } else {
-      pushData(textSelected);
+      pushData(eventsRef, textSelected);
     }
   });
 });
 
-async function authfirebase() {
-  const firebaseConfig = {
-    apiKey: "AIzaSyAOFlUOiFx49azCpd7AY_5y0NCC6dHHGp0",
-    authDomain: "eng-db-click.firebaseapp.com",
-    databaseURL: "https://eng-db-click-default-rtdb.firebaseio.com",
-    projectId: "eng-db-click",
-    storageBucket: "eng-db-click.appspot.com",
-    messagingSenderId: "630778758003",
-    appId: "1:630778758003:web:2b0c3c636af5e2b17fbb06",
-    measurementId: "G-G2V6GZWHJ6"
-  };
-  await firebase.initializeApp(firebaseConfig);
-}
-
-async function fetchData() {
-  const rootRef = firebase.database().ref();
-  const eventsRef = rootRef.child('users');
-
-  await eventsRef.on("child_added", snap => {
-    let user = snap.val();
-    data.push(user.name);
+function fetchData(eventsRef) {
+  eventsRef.then(function(res) {
+    res.on('child_added', snap => {
+      let item = snap.val();
+      data.push(item.en);
+    });
+    alertMsg(ALERT_LOADED);
   });
-  alertMsg(ALERT_LOADED);
 }
 
-async function pushData(en) {
-  const rootRef = firebase.database().ref();
-  const eventsRef = rootRef.child('users');
-  const word = {
-    name: en,
-    email: 'aaa',
-    age: 10
-  };
-
-  await eventsRef.push(word, function() {
-    data.push(en);
-    alertMsg(ALERT_ADDED);
+function pushData(eventsRef, en) {
+  eventsRef.then(function(res) {
+    const word = {
+      en: en,
+      vi: '',
+      audio_link: ''
+    };
+  
+    res.push(word, function() {
+      data.push(en);
+      alertMsg(ALERT_ADDED);
+    });
   });
 }
 

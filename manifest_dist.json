@@ -3,12 +3,12 @@
     "version": "1.0",
     "description": "Translate all words clicked",
     "permissions": [
-        "https://laravel.com/docs/*"
+        ""
     ],
     "content_scripts": [
         {
           "matches": [
-            "https://laravel.com/docs/*"
+            ""
           ],
           "js": [
               "js/jquery-3.5.1.slim.min.js",
